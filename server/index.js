@@ -37,7 +37,25 @@ app.post("/signup", (req, res) => {
   }
 });
 
+app.get("/login", (req, res) => {
+  if (req.session.username) {
+    res.redirect("/chat");
+  } else {
+    res.sendFile(path.join(__dirname, "../public/views/login.html"));
+  }
+});
 
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (users[username] && users[username] === password) {
+    req.session.username = username;
+    res.redirect("/chat");
+  } else {
+    res.send(
+      '<script>alert("Invalid credentials!"); window.location.href="/login";</script>'
+    );
+  }
+});
 
 server.listen(3000, () => {
   console.log("listening on *:3000");
