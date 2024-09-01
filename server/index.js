@@ -8,17 +8,12 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+
 const users = {}; // Stores registered users
 const sessionMiddleware = session({
   secret: "secret-key",
   resave: false,
   saveUninitialized: true,
-});
-
-
-// Shared session with socket.io
-io.use((socket, next) => {
-  sessionMiddleware(socket.request, {}, next);
 });
 
 app.use(express.static("public"));
@@ -29,6 +24,7 @@ app.use(sessionMiddleware);
 io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
+
 // Middleware to protect routes
 function isAuthenticated(req, res, next) {
   if (req.session.username) {
@@ -38,6 +34,7 @@ function isAuthenticated(req, res, next) {
   }
 }
 
+// Routes
 app.get("/", (req, res) => {
   res.redirect("/signup");
 });
@@ -48,6 +45,18 @@ app.get("/signup", (req, res) => {
   } else {
     res.sendFile(path.join(__dirname, "../public/views/signup.html"));
   }
+});
+
+app.get("/login", (req, res) => {
+  if (req.session.username) {
+    res.redirect("/chat");
+  } else {
+    res.sendFile(path.join(__dirname, "../public/views/login.html"));
+  }
+});
+
+app.get("/chat", isAuthenticated, (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/views/chat.html"));
 });
 
 app.post("/signup", (req, res) => {
@@ -61,17 +70,6 @@ app.post("/signup", (req, res) => {
     req.session.username = username;
     res.redirect("/login");
   }
-});
-
-app.get("/login", (req, res) => {
-  if (req.session.username) {
-    res.redirect("/chat");
-  } else {
-    res.sendFile(path.join(__dirname, "../public/views/login.html"));
-  }
-});
-app.get("/chat", isAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/views/chat.html"));
 });
 
 app.post("/login", (req, res) => {
@@ -99,15 +97,15 @@ io.on("connection", (socket) => {
     return;
   }
 
-  console.log(${session.username} connected);
+  console.log(`${session.username} connected`);
 
   socket.on("chat message", (msg) => {
-    const message = ${session.username}: ${msg};
+    const message = `${session.username}: ${msg}`;
     io.emit("chat message", message); 
   });
 
   socket.on("disconnect", () => {
-    console.log(${session.username} disconnected);
+    console.log(`${session.username} disconnected`);
   });
 });
 
