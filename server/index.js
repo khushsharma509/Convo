@@ -12,6 +12,15 @@ const io = new Server(server);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
+// Middleware to protect routes
+function isAuthenticated(req, res, next) {
+  if (req.session.username) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
 app.get("/", (req, res) => {
   res.redirect("/signup");
 });
@@ -55,6 +64,12 @@ app.post("/login", (req, res) => {
       '<script>alert("Invalid credentials!"); window.location.href="/login";</script>'
     );
   }
+});
+
+app.post("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
 });
 
 server.listen(3000, () => {
