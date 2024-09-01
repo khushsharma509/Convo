@@ -12,3 +12,15 @@ sendButton.addEventListener("click", () => {
     messageInput.value = ""; // Clear the input field after sending
   }
 });
+socket.on("chat message", (msg) => {
+  const messageElement = document.createElement("div");
+  messageElement.textContent = msg;
+  chatBox.appendChild(messageElement);
+  chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+});
+
+logoutButton.addEventListener("click", () => {
+  fetch("/logout", { method: "POST" }).then(() => {
+    window.location.href = "/login"; 
+  });
+});
