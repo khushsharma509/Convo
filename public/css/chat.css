@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#chat-container {
+    width: 360px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    max-height: 600px;
+    overflow: hidden;
+}
+
+h2 {
+    text-align: center;
+    color: #00796b;
+    margin: 0 0 20px;
+}
+
+#chat-box {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f1f8e9;
+    border: 1px solid #cfd8dc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#message-input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#send-button {
+    padding: 10px;
+    border: none;
+    background-color: #00796b;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#send-button:hover {
+    background-color: #004d40;
+}
+
+#logout-button {
+    padding: 10px;
+    border: none;
+    background-color: #e53935;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#logout-button:hover {
+    background-color: #c62828;
+}
